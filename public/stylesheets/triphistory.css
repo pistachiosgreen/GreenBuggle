@@ -1,0 +1,63 @@
+h1, h3{
+	color:#093;
+}
+h2, h4{
+    color:#06f;
+    text-align: center;
+}
+h1, h2, h3, h4 {
+    font-family: 'Michroma', 'Open Sans', sans-serif;
+}
+
+.trips {
+	width: 100%;
+	border-bottom: 3px solid;
+	text-align: left;
+	padding-left: auto;
+	padding-right: auto;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 120%;
+}
+.default {
+}
+.spacing {
+	height: 0.5em;
+}
+.dateb {
+	border-bottom: 3px solid;
+	border-top: 3px solid;
+	border-left: 3px solid;
+	border-color: #06c;
+	padding-left: 0.5em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	padding-right: 25px;
+}
+.actionb {
+	border-bottom: 3px solid;
+	border-top: 3px solid;
+	border-right: 3px solid;
+	padding-left: 25px;
+	border-color: #06c;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+.dateg {
+	border-bottom: 3px solid;
+	border-top: 3px solid;
+	border-left: 3px solid;
+	padding-right: 25px;
+	border-color: #093;
+	padding-left: 0.5em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+.actiong {
+	border-bottom: 3px solid;
+	border-top: 3px solid;
+	border-right: 3px solid;
+	padding-left: 25px;
+	border-color: #093;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}

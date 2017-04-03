@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/triphistory.css" />
+    <link href='https://fonts.googleapis.com/css?family=Michroma|Open+Sans' rel='stylesheet' type='text/css'/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+
+    <title>GreenBuggle</title> 
+
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/choices"><img src="/images/bugglelogo-w.png" height="35px" align="top" alt="logo"> GreenBuggle</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome <%= user.name%>!<span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/logout">Log Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+  </head>
+
+  <body>
+
+    <div id="container">
+      
+      <br><br>
+      <h1>Past Trips</h1>
+      <br>
+      
+      <% var totalCarbon = 0 %>
+      <% var totalTrips = 0 %>
+      <% db.forEach(function (trip){ 
+        totalCarbon = totalCarbon + trip.carbon;
+        totalTrips = totalTrips + 1;
+      }); 
+      totalCarbon = Math.round(totalCarbon * 100) / 100;
+      if (totalTrips>0){ %>
+        <h4><b>You've gone on  <%=totalTrips %>  <%if (totalTrips==1){ %>trip<%} else { %>
+          trips<%}%> so far and emitted  <%=totalCarbon %>  kg of CO<sub>2</sub>.
+        </b></h4>
+      <% } else { %>
+        <h4><b>You have no past trips!</b></h4>
+      <% } %>
+
+      <br><br>
+
+      <div class='row'>
+        <div class='col-md-2'></div>
+        <div class='col-md-8'>
+                 
+          <table class="trips">
+            <% db.forEach(function (trip){ %>
+              <% if (trip.method=='car') { %>
+                <tr class="default">
+                  <td class="dateb"><%= trip.date.getMonth()+1%>/<%= trip.date.getDate()%>/<%= trip.date.getFullYear()%></td>
+                  <td class="actionb">You travelled from <%= trip.origin %> to <%= trip.destination %> by <%= trip.method %>, and emitted <%= trip.carbon %> kg of CO<sub>2</sub>.</td>
+                </tr>
+                <tr class="spacing"></tr> 
+              <% } else { %>
+                <tr class="default">
+                <td class="dateg"><%= trip.date.getMonth()+1%>/<%= trip.date.getDate()%>/<%= trip.date.getFullYear()%></td>
+                <td class="actiong">You travelled from <%= trip.origin %> to <%= trip.destination %> by <%= trip.method %>, and emitted <%= trip.carbon %> kg of CO<sub>2</sub>.</td> 
+                </tr>
+                <tr class="spacing"></tr> 
+              <%}%>
+            <% }); %>
+          </table>
+
+          <br><br>
+        
+          <p style="text-align:center">
+            <a class="btn btn-success btn-lg" href="/choices" role="button" style="color:#fff">Back to main menu</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>
+
+
+
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <link href='https://fonts.googleapis.com/css?family=Michroma|Open+Sans' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/directions.css" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+
+    <script src="/javascripts/directions.js"></script>
+
+    <script>google.maps.event.addDomListener(window, 'load', initialize);</script>
+    
+    <title>GreenBuggle</title>
+
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/choices"><img src="/images/bugglelogo-w.png" height="35px" align="top"> GreenBuggle</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome <%= user.name%>!<span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/logout">Log Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+  </head>
+
+  <body onload="init()">
+
+    <div class='jumbotron'>
+      <div class='row'>
+
+        <div class='col-md-9'>
+          
+          <div id="flight-panel">
+            <button id="but" type="button" onmouseover="showpop()" onmouseout="hidepop()" class="btn btn-danger" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Consider taking public transit in your destination city! For example, if you're travelling to London, see if you can get from Heathrow airport to your hotel by bus.">
+              Flying somewhere?
+            </button>
+          </div>
+
+          <div id="map-canvas"></div>
+          <div id="control">
+            <label for="start">Start address</label>
+            <input type="text" id="start"><span class="address" id="startAdd"></span><br>
+            <label for="dest">Destination address</label>
+            <input type="text" id="dest"><span class="address" id="destAdd"></span><br>
+            <button onclick="calcRoute()">Find Route</button>
+          </div>
+        </div>
+
+        <div class='col-md-3'>
+          <div id="directions-panel">
+            <ul id="tabs" class="nav nav-pills">
+              <li id='transli' role="presentation"><a href="#transit">Transit</a></li>
+              <li id='driveli' role="presentation"><a href="#car">Driving</a></li>
+              <li id='walkli' role="presentation"><a href="#walking">Walking</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!--end row-->
+    </div> <!--close #jumbotron-->
+
+    <div class='container'>
+
+      <div id="travelOptions">
+        <button type="button" onclick="show_visibility('travelChoice');" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#travelModal">
+          Explore your green options
+        </button>
+      </div>
+
+      <br>
+        
+      <div class='row'>
+        <div class='col-md-3'></div>
+        <div class='col-md-6'>
+        
+          <div id="travelChoice">
+            <form class="inline" id="myFormTransit" action="/pastTrips" method="POST" onsubmit="return mySubmitTransit()">
+              <input type='hidden' id="transportation" name="transportation" value="transit">
+              <input type='hidden' id= 'carbonInput' name='carbonValue' value= 0 />
+              <input type='hidden' id= 'startInput' name='start' value='' />
+              <input type='hidden' id= 'endInput' name='end' value='' />
+              <input class="btn btn-default" id='transitButton' type="submit" value="I'll take transit">
+            </form>
+
+            <form class="inline" id="myFormCar" action="/pastTrips" method="POST" onsubmit="return mySubmitCar()">
+              <input type='hidden' id="transportation" name="transportation" value="car">
+              <input type='hidden' id= 'carbonInput' name='carbonValue' value= 0 />
+              <input type='hidden' id= 'startInput' name='start' value='' />
+              <input type='hidden' id= 'endInput' name='end' value='' />
+              <input class="btn btn-default" id='driveButton' type="submit" value="I'll drive">
+            </form>
+
+            <form class="inline" id="myFormWalk" action="/pastTrips" method="POST" onsubmit="return mySubmitWalk()">
+              <input type='hidden' id="transportation" name="transportation" value="walking">
+              <input type='hidden' id= 'carbonInput' name='carbonValue' value= 0 />
+              <input type='hidden' id= 'startInput' name='start' value='' />
+              <input type='hidden' id= 'endInput' name='end' value='' />
+              <input class="btn btn-default" id='walkButton' type="submit" value="I'll walk">
+            </form>
+
+            <form class="inline" id="myFormNo" action="/choices">
+              <input class="btn btn-danger" type="submit" value="I'm not going">
+            </form>
+          </div>
+          <br class="clearBoth" />
+
+        </div>
+        
+        <br><br><br><br><br><br>
+      </div>
+    
+    </div> <!--close #container-->
+
+
+    <!-- 3 Circles Modal -->
+    <div class="modal fade infoCircles" id="travelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id='bcirc_transit'>
+          <div class="circleText"><h3>If you took <u>transit</u>,</h3>
+            <p>your CO<sub>2</sub> emissions for<br>this trip would be around</p>
+            <p><span id="rail"></span> kg</p>
+            <p>and it would take about</p>
+            <p><span id="ttime"></span></p>
+          </div>
+        </div>
+        <div class="modal-content" id='bcirc_car'>
+          <div class="circleText"><h3>If you <u>drove</u>,</h3>
+            <p>your CO<sub>2</sub> emissions for<br>this trip would be around</p>
+            <p><span id="total"></span> kg</p>
+            <p>and it would take about</p>
+            <p><span id="dtime"></span></p>
+          </div>
+        </div>
+        <div class="modal-content" id='bcirc_walk'>
+          <div class="circleText"><h3>If you <u>walked</u>,</h3>
+            <p>your CO<sub>2</sub> emissions for<br>this trip would be</p>
+            <p>0 kg</p>
+            <p>and it would take about</p>
+            <p><span id="watime"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+
+
